@@ -70,9 +70,9 @@ http.createServer(function(req,res){
       res.writeHead('404','Not found',{'Content-Type':'text/html'});
       res.end('<html><head><title>ERROR</title></head><body><h1>NOT SUPPORTED</h1></body></html>');
   }
-}).listen(4949,function(err){
+}).listen(8080,function(err){
   if(!err)
-    console.log('[INFO] Listening on 4949');
+    console.log('[INFO] Listening on 8080');
   else
     console.log('[INFO] '+err.message);
   });
