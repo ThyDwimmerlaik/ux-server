@@ -57,13 +57,12 @@ http.createServer(function(req,res){
       res.end();
     break;
     case '/login_test':
-      console.log("[200] " + req.method + " to " + req.url);
       res.writeHead(200, "OK", {'Content-Type': 'text/html'});
       res.write('<html><head><title>LOGIN_TEST</title></head><body>');
       res.write('<h1>POST LOGIN TEST</h1>');
       res.write('<form enctype="application/x-www-form-urlencoded" action="/login" method="post">');
       res.write('Name: <input type="text" name="name" value="" /><br />');
-      res.write('Age: <input type="password" name="pass" value="" /><br />');
+      res.write('Password: <input type="password" name="pass" value="" /><br />');
       res.write('<input type="submit" />');
       res.write('</form></body></html');
       res.end();
@@ -105,16 +104,26 @@ http.createServer(function(req,res){
     break;
     case '/get_lights':
       if(req.method=='GET'){
-        handleDB('SELECT id,A FROM cu_devices;',function(query_res){
+        handleDB('SELECT id,A FROM cu_devices WHERE type="W";',function(query_res){
           res.writeHead(200,'OK',{'Content-Type':'text/html'});
           for(var n in query_res){
-            res.write('Dispositivo: '+query_res[n].id+'\tEstado: '+query_res[n].A+'\n');
+            res.write('Dispositivo: '+query_res[n].id+'\tEstado: '+query_res[n].A+'\n\r');
           }
           res.end();
         });
       }
     break;
-    case '/post_lights':
+    case '/post_light_test':
+      res.writeHead(200, "OK", {'Content-Type': 'text/html'});
+      res.write('<html><head><title>LIGHT_TEST</title></head><body>');
+      res.write('<h1>POST LIGHT TEST</h1>');
+      res.write('<form enctype="application/x-www-form-urlencoded" action="/post_light" method="post">');
+      res.write('Device: <input type="text" name="id" value="" /><br />');
+      res.write('Value: <input type="password" name="estado" value="" /><br />');
+      res.write('<input type="submit" />');
+      res.write('</form></body></html');
+      res.end();
+    case '/post_light':
       if(req.method=='POST'){
         req.on('data',function(chunk){
           readPostData = qs.parse(String(chunk));
