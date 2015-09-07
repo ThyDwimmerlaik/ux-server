@@ -72,7 +72,7 @@ http.createServer(function(req,res){
   }
 }).listen(4949,function(err){
   if(!err)
-    writeLog('[INFO] Listening on 8080');
+    console.log('[INFO] Listening on 4949');
   else
-    writeLog('[INFO] '+err.message);
+    console.log('[INFO] '+err.message);
   });
