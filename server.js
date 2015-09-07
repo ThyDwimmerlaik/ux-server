@@ -56,7 +56,7 @@ http.createServer(function(req,res){
       res.writeHead(200,'OK',{'Content-Type':'text/html'});
       res.end();
     break;
-    case 'login_test':
+    case '/login_test':
       console.log("[200] " + req.method + " to " + req.url);
       res.writeHead(200, "OK", {'Content-Type': 'text/html'});
       res.write('<html><head><title>LOGIN_TEST</title></head><body>');
@@ -75,21 +75,28 @@ http.createServer(function(req,res){
           console.log(readPostData);
         });
         req.on('end',function(){
-          handleDB('SELECT pass from ux_users where name="'+readPostData.name+'";',function(query_res){
-            if(query_res.length>0){
-              if(String(query_res.pass) == readPostData.pass){
-                res.writeHead(200, "OK", {'Content-Type': 'text/html'});
-                res.write('Bienvenido '+readPostData.name);
-                res.end();
+          handleDB('SELECT name,pass from ux_users;',function(query_res){
+            var name_exist = 0;
+            for(var n in query_res){
+              if(query_res[n].name==readPostData.name){
+                name_exist = 1;
+                if(query_res[n].pass==readPostData.pass){
+                  res.writeHead(200,'OK',{'Content-Type':'text/html'});
+                  res.write('Bienvenido '+readPostData.name);
+                  res.end();
+                  break;
+                }
+                else{
+                  res.writeHead(200,'OK',{'Content-Type':'text/html'});
+                  res.write('Contrasena incorrecta');
+                  res.end();
+                  break;
+                }
               }
-              else{
-                res.writeHead(200, "OK", {'Content-Type': 'text/html'});
-                res.write('Contrasena incorrecta');
-                res.end();
-              }
-            }else{
-              res.writeHead(200, "OK", {'Content-Type': 'text/html'});
-              res.write('No existe el usuario '+readPostData.name);
+            }
+            if(!name_exist){
+              res.writeHead(200,'OK',{'Content-Type':'text/html'});
+              res.write('El usuario '+readPostData.name+' no existe');
               res.end();
             }
           });
