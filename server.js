@@ -104,12 +104,38 @@ http.createServer(function(req,res){
       }
     break;
     case '/get_lights':
-        
+      if(req.method=='GET'){
+        handleDB('SELECT id,A FROM cu_devices;',function(query_res){
+          res.writeHead(200,'OK',{'Content-Type':'text/html'});
+          for(var n in query_res){
+            res.write('Dispositivo: '+query_res[n].id+'\tEstado: '+query_res[n].A+'\n');
+          }
+          res.end();
+        });
+      }
     break;
     case '/post_lights':
-
+      if(req.method=='POST'){
+        req.on('data',function(chunk){
+          readPostData = qs.parse(String(chunk));
+          console.log('Recieved login.');
+          console.log(readPostData);
+        });
+        req.on('end',function(){
+          handleDB('UPDATE cu_devices SET A="'+readPostData.estado+'" WHERE id="'+readPostData.id+'";');
+        });
+      }
     break;
-
+    case '/get_stats':
+      if(req.method=='GET'){
+        handleDB('SELECT id_dev,A,datetime FROM cu_lecturas;',function(query_res){
+          res.writeHead(200,'OK',{'Content-Type':'text/html'});
+          for(var n in query_res){
+            res.write('Dispositivo: '+query_res[n].id+'\tLectura: '+query_res[n].A+'\tFecha: '+query_res[n].datetime+'\n');
+          }
+          res.end();
+        });
+      }
     default:
       console.log('[404] '+req.method+' to '+req.url);
       res.writeHead('404','Not found',{'Content-Type':'text/html'});
