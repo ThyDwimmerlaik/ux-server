@@ -134,11 +134,15 @@ http.createServer(function(req,res){
         req.on('end',function(){
           handleDB('SELECT A FROM cu_devices where id="'+readPostData.dev_id+'";',function(query_res){
             if(query_res[0].A=="M"){
+              console.log('TOGGLE M->N');
               handleDB('UPDATE cu_devices SET A="N" WHERE id="'+readPostData.dev_id+'";');
             }
             else if (query_res[0].A=="N"){
               handleDB('UPDATE cu_devices SET A="M" WHERE id="'+readPostData.dev_id+'";');
+              console.log('TOGGLE N->M');
             }
+            res.writeHead(200, "OK", {'Content-Type': 'text/html'});
+            res.end();
           });
         });
       }
@@ -148,7 +152,7 @@ http.createServer(function(req,res){
         handleDB('SELECT id_dev,A,datetime FROM cu_lecturas;',function(query_res){
           res.writeHead(200,'OK',{'Content-Type':'text/html'});
           for(var n in query_res){
-            res.write('Dispositivo: '+query_res[n].id+'\tLectura: '+query_res[n].A+'\tFecha: '+query_res[n].datetime+'\n');
+            res.write('Dispositivo: '+query_res[n].id_dev+'\tLectura: '+query_res[n].A+'\tFecha: '+query_res[n].datetime+'\n');
           }
           res.end();
         });
