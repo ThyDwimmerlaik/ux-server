@@ -66,6 +66,7 @@ http.createServer(function(req,res){
       res.write('<input type="submit" />');
       res.write('</form></body></html');
       res.end();
+    break;
     case '/login':
       if(req.method=='POST'){
         req.on('data',function(chunk){
@@ -122,6 +123,7 @@ http.createServer(function(req,res){
       res.write('<input type="submit" />');
       res.write('</form></body></html');
       res.end();
+    break;
     case '/set_light':
       if(req.method=='POST'){
         req.on('data',function(chunk){
@@ -151,6 +153,7 @@ http.createServer(function(req,res){
           res.end();
         });
       }
+    break;
     default:
       console.log('[404] '+req.method+' to '+req.url);
       res.writeHead('404','Not found',{'Content-Type':'text/html'});
