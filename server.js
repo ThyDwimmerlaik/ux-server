@@ -136,14 +136,14 @@ http.createServer(function(req,res){
           console.log('Recieved toggle order.');
           console.log(readPostData);
           handleDB('SELECT A FROM cu_devices where id="'+String(readPostData.dev_id)+'";',function(query_res){
-            console.log(query.res[0]);
-            if(query_res[0].A=="M"){
-              console.log('TOGGLE M->N');
-              handleDB('UPDATE cu_devices SET A="N" WHERE id="'+String(readPostData.dev_id)+'";');
+            console.log(String(query_res[0]));
+            if(String(query_res[0].A)=="OFF"){
+              console.log('TOGGLE ENCENDIDO');
+              handleDB('UPDATE cu_devices SET A="ON" WHERE id="'+String(readPostData.dev_id)+'";');
             }
-            else if (query_res[0].A=="N"){
-              handleDB('UPDATE cu_devices SET A="M" WHERE id="'+String(readPostData.dev_id)+'";');
-              console.log('TOGGLE N->M');
+            else if (String(query_res[0].A)=="ON"){
+              console.log('TOGGLE APAGADO');
+              handleDB('UPDATE cu_devices SET A="OFF" WHERE id="'+String(readPostData.dev_id)+'";');
             }
             res.writeHead(200, "OK", {'Content-Type': 'text/html'});
             res.end();
