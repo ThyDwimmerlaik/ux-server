@@ -109,6 +109,7 @@ http.createServer(function(req,res){
           res.writeHead(200,'OK',{'Content-Type':'text/html'});
           for(var n in query_res){
             res.write('Dispositivo: '+query_res[n].id+'\tEstado: '+query_res[n].A+'\n\r');
+            res.write('<br/>');
           }
           res.end();
         });
@@ -132,13 +133,13 @@ http.createServer(function(req,res){
           console.log(readPostData);
         });
         req.on('end',function(){
-          handleDB('SELECT A FROM cu_devices where id="'+readPostData.dev_id+'";',function(query_res){
+          handleDB('SELECT A FROM cu_devices where id="'+String(readPostData.dev_id)+'";',function(query_res){
             if(query_res[0].A=="M"){
               console.log('TOGGLE M->N');
-              handleDB('UPDATE cu_devices SET A="N" WHERE id="'+readPostData.dev_id+'";');
+              handleDB('UPDATE cu_devices SET A="N" WHERE id="'+String(readPostData.dev_id)+'";');
             }
             else if (query_res[0].A=="N"){
-              handleDB('UPDATE cu_devices SET A="M" WHERE id="'+readPostData.dev_id+'";');
+              handleDB('UPDATE cu_devices SET A="M" WHERE id="'+String(readPostData.dev_id)+'";');
               console.log('TOGGLE N->M');
             }
             res.writeHead(200, "OK", {'Content-Type': 'text/html'});
@@ -153,6 +154,7 @@ http.createServer(function(req,res){
           res.writeHead(200,'OK',{'Content-Type':'text/html'});
           for(var n in query_res){
             res.write('Dispositivo: '+query_res[n].id_dev+'\tLectura: '+query_res[n].A+'\tFecha: '+query_res[n].datetime+'\n');
+            res.write('<br/>');
           }
           res.end();
         });
