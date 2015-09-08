@@ -127,13 +127,16 @@ http.createServer(function(req,res){
     break;
     case '/set_light':
       if(req.method=='POST'){
+        readPost = '';
         req.on('data',function(chunk){
-          readPostData = qs.parse(String(chunk));
-          console.log('Recieved toggle order.');
-          console.log(readPostData);
+          readPost += chunk.toString();
         });
         req.on('end',function(){
+          readPostData = qs.parse(readPost);
+          console.log('Recieved toggle order.');
+          console.log(readPostData);
           handleDB('SELECT A FROM cu_devices where id="'+String(readPostData.dev_id)+'";',function(query_res){
+            console.log(query.res[0]);
             if(query_res[0].A=="M"){
               console.log('TOGGLE M->N');
               handleDB('UPDATE cu_devices SET A="N" WHERE id="'+String(readPostData.dev_id)+'";');
