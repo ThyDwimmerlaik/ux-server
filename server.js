@@ -113,25 +113,31 @@ http.createServer(function(req,res){
         });
       }
     break;
-    case '/post_light_test':
+    case '/set_light_test':
       res.writeHead(200, "OK", {'Content-Type': 'text/html'});
       res.write('<html><head><title>LIGHT_TEST</title></head><body>');
       res.write('<h1>POST LIGHT TEST</h1>');
-      res.write('<form enctype="application/x-www-form-urlencoded" action="/post_light" method="post">');
-      res.write('Device: <input type="text" name="id" value="" /><br />');
-      res.write('Value: <input type="password" name="estado" value="" /><br />');
+      res.write('<form enctype="application/x-www-form-urlencoded" action="/set_light" method="post">');
+      res.write('Device: <input type="text" name="dev_id" value="" /><br />');
       res.write('<input type="submit" />');
       res.write('</form></body></html');
       res.end();
-    case '/post_light':
+    case '/set_light':
       if(req.method=='POST'){
         req.on('data',function(chunk){
           readPostData = qs.parse(String(chunk));
-          console.log('Recieved login.');
+          console.log('Recieved toggle order.');
           console.log(readPostData);
         });
         req.on('end',function(){
-          handleDB('UPDATE cu_devices SET A="'+readPostData.estado+'" WHERE id="'+readPostData.id+'";');
+          handleDB('SELECT A FROM cu_devices where id="'+readPostData.dev_id+'";',function(query_res){
+            if(query_res[0].A=="M"){
+              handleDB('UPDATE cu_devices SET A="N" WHERE id="'+readPostData.dev_id+'";');
+            }
+            else if (query_res[0].A=="N"){
+              handleDB('UPDATE cu_devices SET A="M" WHERE id="'+readPostData.dev_id+'";');
+            }
+          });
         });
       }
     break;
