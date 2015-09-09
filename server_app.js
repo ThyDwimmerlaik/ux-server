@@ -168,7 +168,8 @@ app.get('/set_light_test',function(req,res){
 });
 
 app.get('/get_stats'),function(req,res){
-  handleDB('SELECT id_dev,A,datetime FROM cu_lecturas;',function(query_res){
+  if(req.method=='GET'){
+        handleDB('SELECT id_dev,A,datetime FROM cu_lecturas;',function(query_res){
           res.writeHead(200,'OK',{'Content-Type':'text/html'});
           for(var n in query_res){
             res.write('Dispositivo: '+query_res[n].id_dev+'\tLectura: '+query_res[n].A+'\tFecha: '+query_res[n].datetime+'\n');
