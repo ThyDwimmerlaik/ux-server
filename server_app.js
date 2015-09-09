@@ -143,7 +143,7 @@ app.get('/login',function(req,res){
 });
 
 
-app.get('/get_lights',function(){
+app.get('/get_lights',function(req,res){
 	if(req.method=='GET'){
         handleDB('SELECT id,A FROM cu_devices WHERE type="W";',function(query_res){
           res.writeHead(200,'OK',{'Content-Type':'text/html'});
@@ -156,7 +156,7 @@ app.get('/get_lights',function(){
       }
 });
 
-app.get('/set_light_test',function(){
+app.get('/set_light_test',function(req,res){
 	res.writeHead(200, "OK", {'Content-Type': 'text/html'});
     res.write('<html><head><title>LIGHT_TEST</title></head><body>');
     res.write('<h1>POST LIGHT TEST</h1>');
