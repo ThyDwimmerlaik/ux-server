@@ -17,14 +17,14 @@
 	    <link rel="stylesheet" type="text/css" href="css/style.css" />
 	    <link href='css/elusive-webfont.css' rel='stylesheet' type='text/css'>
 	    <link rel="stylesheet" type="text/css" href="css/style1.css" />
-	    
+	   	
 	</head>
 	<body id="demo5">
 		<div class="container">
 			<!-- Top Navi -->
 			<div class="nav-top clearfix">
-				<span class="right"><a class="nav-icon icon-th" href="http://www.onextrapixel.com/category/tutorials/"><span>View all Tutorials</span></a></span>
-				<span class="right"><a class="nav-icon icon-left" href="http://www.onextrapixel.com/2013/08/21/create-a-path-like-menu-button-with-wheelmenu-js/"><span>Back to Tutorial Article</span></a></span>
+				<!--<span class="right"><a class="nav-icon icon-th" href="http://www.onextrapixel.com/category/tutorials/"><span>View all Tutorials</span></a></span>
+				<span class="right"><a class="nav-icon icon-left" href="http://www.onextrapixel.com/2013/08/21/create-a-path-like-menu-button-with-wheelmenu-js/"><span>Back to Tutorial Article</span></a></span>-->
 			</div>
 			
 			<div class="header">
@@ -37,31 +37,31 @@
 			</div>
 		
 			<div class="main">
-			  <a href="#wheel" class="wheel-button">
+			  <a id="#toggle" href="#wheel" class="wheel-button">
 			   <i class="customicon-plus"></i>
 			  </a>
-			  <!--<div class="pointer">aqui va un texto </div>-->
+			  <div class="pointer">Lights</div>
 	      <ul id="wheel" class="wheel">
-	        <li class="item"><a href="#home"><i class="customicon-user"></i></a></li>
-	        <li class="item"><a href="#home"><i class="customicon-video"></i></a></li>
-	        <li class="item"><a href="#home"><i class="customicon-home"></i></a></li>
-	        <li class="item"><a href="#home"><i class="customicon-picture"></i></a></li>
-	        <li class="item"><a href="#home"><i class="customicon-camera"></i></a></li>
-	        <li class="item"><a href="#home"><i class="customicon-video"></i></a></li>
-	        <li class="item"><a href="#home"><i class="customicon-home"></i></a></li>
-	        <li class="item"><a href="#home"><i class="customicon-picture"></i></a></li>
-	        <li class="item"><a href="#home"><i class="customicon-camera"></i></a></li>
+	        <li class="item">
+	        	<a id="toggle" href="#"><i class="customicon-user"></i></a>
+	        </li>
+	        <li class="item"><a href="#"><i class="customicon-video"></i></a></li>
+	        <li class="item"><a href="#"><i class="customicon-home"></i></a></li>
+	        <li class="item"><a href="#"><i class="customicon-picture"></i></a></li>
+	        <li class="item"><a href="#"><i class="customicon-camera"></i></a></li>
+	        <li class="item"><a href="#"><i class="customicon-video"></i></a></li>
+	        <li class="item"><a href="#"><i class="customicon-home"></i></a></li>
+	        <li class="item"><a href="#"><i class="customicon-picture"></i></a></li>
+	        <li class="item"><a href="#"><i class="customicon-camera"></i></a></li>
 	      </ul>
 	    </div>
 		</div><!-- Container -->
-		
-	<script type="text/javascript">
-    	$(".wheel-button").wheelmenu({
-      		trigger: "hover",
-      		animation: "fly",
-      		angle: [0, 270]
-    	});
-  	</script>
-		
+		<script type="text/javascript">
+    		$(".wheel-button").wheelmenu({
+	      		trigger: "hover",
+      			animation: "fly",
+      			angle: [0, 270]
+    		});
+  		</script>
 	</body>
 </html>

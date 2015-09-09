@@ -1,9 +1,15 @@
-var express = require("express");
-var app     = express();
-var path    = require("path");
+var express = require('express');
 var mysql = require('mysql');
 var qs = require('querystring');
+var path    = require("path");
+
+var app = express();
+
+var readPost = '';
+var readPostData;
+
 var conn = require('../db/connection.json');
+
 
 var pool = mysql.createPool({
   connectionLimit :   100,
@@ -50,21 +56,55 @@ function handleDB(q,callback){
   });
 }
 
+app.use(express.static(__dirname+'/front'));
 
-app.get('/',function(req,res){
-  res.sendFile(path.join(__dirname+'/index.html'));
+app.post('/set_light', function (req, res) {
+  if(req.method=='POST'){
+        readPost = '';
+        req.on('data',function(chunk){
+          readPost += chunk.toString();
+        });
+        req.on('end',function(){
+          readPostData = qs.parse(readPost);
+          console.log('Recieved toggle order.');
+          console.log(readPostData);
+          handleDB('SELECT A FROM cu_devices where id="'+String(readPostData.dev_id)+'";',function(query_res){
+            console.log(String(query_res[0]));
+            if(String(query_res[0].A)=="OFF"){
+              console.log('TOGGLE ENCENDIDO');
+              handleDB('UPDATE cu_devices SET A="ON" WHERE id="'+String(readPostData.dev_id)+'";');
+            }
+            else if (String(query_res[0].A)=="ON"){
+              console.log('TOGGLE APAGADO');
+              handleDB('UPDATE cu_devices SET A="OFF" WHERE id="'+String(readPostData.dev_id)+'";');
+            }
+            res.writeHead(200, "OK", {'Content-Type': 'text/html'});
+            res.end();
+          });
+        });
+      }
 });
-app.get('/login_test',function(req,res){
+
+app.get('/set_light_test',function(req,res){
   res.writeHead(200, "OK", {'Content-Type': 'text/html'});
-  res.write('<html><head><title>LOGIN_TEST</title></head><body>');
-  res.write('<h1>POST LOGIN TEST</h1>');
-  res.write('<form enctype="application/x-www-form-urlencoded" action="/login" method="post">');
-  res.write('Name: <input type="text" name="name" value="" /><br />');
-  res.write('Password: <input type="password" name="pass" value="" /><br />');
+  res.write('<html><head><title>LIGHT_TEST</title></head><body>');
+  res.write('<h1>POST LIGHT TEST</h1>');
+  res.write('<form enctype="application/x-www-form-urlencoded" action="/set_light" method="post">') 
+  res.write('Device: <input type="text" name="dev_id" value="" /><br />');
   res.write('<input type="submit" />');
   res.write('</form></body></html');
   res.end();
 });
+
+var server = app.listen(8080, function () {
+
+  var host = server.address().address
+  var port = server.address().port
+
+  console.log('Example app listening at http://%s:%s', host, port)
+
+})
+
 app.get('/login',function(req,res){
   if(req.method=='POST'){
         req.on('data',function(chunk){
@@ -101,6 +141,8 @@ app.get('/login',function(req,res){
         });
       }
 });
+
+
 app.get('/get_lights',function(){
 	if(req.method=='GET'){
         handleDB('SELECT id,A FROM cu_devices WHERE type="W";',function(query_res){
@@ -113,18 +155,7 @@ app.get('/get_lights',function(){
         });
       }
 });
-app.get('/get_lights',function(){
-	if(req.method=='GET'){
-        handleDB('SELECT id,A FROM cu_devices WHERE type="W";',function(query_res){
-          res.writeHead(200,'OK',{'Content-Type':'text/html'});
-          for(var n in query_res){
-            res.write('Dispositivo: '+query_res[n].id+'\tEstado: '+query_res[n].A+'\n\r');
-            res.write('<br/>');
-          }
-          res.end();
-        });
-      }
-});
+
 app.get('/set_light_test',function(){
 	res.writeHead(200, "OK", {'Content-Type': 'text/html'});
     res.write('<html><head><title>LIGHT_TEST</title></head><body>');
